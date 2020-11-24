@@ -1,5 +1,25 @@
 #include <iostream>
 
+//custom data type 
+struct point
+{
+    int x;
+    int y;
+};
+
+std::ostream& operator << (std::ostream& out, const point& p)
+{
+    out << '(' << p.x << ',' << p.y << ") ";
+    return out;
+}
+
+int operator == (point a, point b)
+{
+    if ((a.x == b.x) && (a.y == b.y))
+        return 1;
+    else return 0;
+}
+
 template <typename T>
 struct node 
 {
@@ -245,8 +265,8 @@ int main ()
 {
     circ_linked_list<int> list;
 
-    int first = 0;
-    init <int> (list, first);
+    int zero = 0;
+    init <int> (list, zero);
 
     add(list, 1, 1); //end
     add(list, -1, 0); //start
@@ -283,6 +303,51 @@ int main ()
     std::cout << "Size: " << size(list) << std::endl;
 
     destruct(list);
+
+    /////////////////////////////////////////
+    std::cout << "------------" << std::endl;
+    /////////////////////////////////////////
+
+    circ_linked_list<point> list2;
+
+    point first;
+    first.x = 0;
+    first.y = 0;
+
+    point second;
+    second.x = 1;
+    second.y = 1;
+
+    point third;
+    third.x = 2;
+    third.y = 2;
+
+    init <point> (list2, first);
+    print(list2);
+
+    add (list2, second, 0);
+    add (list2, third, 1);
+
+    print (list2);
+    std::cout << "Size " << size(list2) << std::endl;
+    std::cout << "Find 0,0 " << find(list2, first) << std::endl;
+
+    pop (list2,0);
+    pop (list2,1);
+
+    node<point>* pointer3 = list2.first;
+    add_pointer(list2, third, pointer3);
+    add_index(list2, second, 1);
+    std::cout << get_data(list2,1) << std::endl;
+
+    print(list2);
+
+    std::cout << "Poppint 0: " << std::endl;
+    pop_pointer(list2, pointer3);
+    print(list2);
+
+    pop_index(list2, 0);
+    print(list2);
 
     return 0;
 }
