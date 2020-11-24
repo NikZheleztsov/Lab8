@@ -1,30 +1,5 @@
 #include <iostream>
 
-/*
-struct point 
-{
-    int x; 
-    int y;
-};
-*/
-
-
-/*
-int operator == (point& a, point& b)
-{
-    if ((a.x == b.x) && (a.y == b.y))
-        return 1;
-    else return 0;
-}
-
-int operator != (point& a, char b)
-{
-    if (a.x != b && a.y != b)
-        return 1;
-    else return 0;
-}
-*/
-
 class point // Impossible to overload '=' whithout using class!
 {
     public:
