@@ -111,8 +111,8 @@ void add_pointer (circ_linked_list<T>& list, T info, node<T>* pointer)
     node<T>* new_one = new node<T>;
     new_one->data = info;
 
-    new_one->prev = pointer->prev;
-    new_one->next = pointer;
+    new_one->prev = pointer;
+    new_one->next = pointer->next;
 
     new_one->prev->next = new_one;
     new_one->next->prev = new_one;
@@ -224,7 +224,7 @@ int find (const circ_linked_list<T>& list, T info)
             pointer = pointer->next;
         }
     } while (pointer != list.first);
-    delete(pointer);
+
     return -1;
 }
 

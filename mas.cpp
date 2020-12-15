@@ -45,15 +45,7 @@ template <typename T, int size>
 struct list
 {
     T arr[size];
-};
-
-template <typename T, int size>
-void init(list<T,size>& list, T info)
-{
-    for (int i = 0; i < size; i++)
-        list.arr[i] = EOF; //check overload // can't to overload =
-
-    list.arr[0] = info;
+    int real_size;
 };
 
 template <typename T, int size>
@@ -65,34 +57,47 @@ int size_of_list (list<T,size>& list)
 }
 
 template <typename T, int size>
+void init(list<T,size>& list, T info)
+{
+    for (int i = 0; i < size; i++)
+        list.arr[i] = EOF; //check overload // can't to overload =
+
+    list.arr[0] = info;
+    list.real_size = 1;
+}
+
+template <typename T, int size>
 void add (list<T,size>& list, T info, bool dir) // 0 - beginning; else - end;
 {
-    if (size_of_list(list) == size)
+    if (list.real_size == size)
         std::cout << "List is full\n";
     else {
         if (dir == 0)
         {
-            for (int i = size_of_list(list); i > 0; i--)
-                list.arr[i] = list.arr[i-1];
+            for (int i = size_of_list(list); i > 0; i--)  
+                list.arr[i] = list.arr[i-1]; // Разве можно избавиться от сдвига всех элементов при вставке в начало?
             list.arr[0] = info;
 
         } else 
             list.arr[size_of_list(list)] = info;
+
+        list.real_size++;
     } 
 }
 
 template <typename T, int size>
 void add_index (list<T,size>& list, T info, int index)
 {
-    if (size_of_list(list) == size)
+    if (list.real_size == size)
         std::cout << "List is full\n";
     else {
         if (size_of_list(list) < index)
             std::cout << "Unable to add an element\n";
         else {
-            for (int i = size_of_list(list); i >= index; i--)
+            for (int i = size_of_list(list); i >= index; i--) 
                 list.arr[i] = list.arr[i-1];
             list.arr[index] = info;
+            list.real_size++;
         }
     }
 }
@@ -110,6 +115,8 @@ T pop (list<T,size>& list, bool dir) //0 - beginning
         ret = list.arr[size_of_list(list) - 1];
         list.arr[size_of_list(list) - 1] = EOF;
     }
+
+    list.real_size--;
     
     return ret;
 }
@@ -124,6 +131,8 @@ T pop_index (list<T,size>& list, int index)
         ret = list.arr[index];
         for (int i = index; i < size_of_list(list); i++)
             list.arr[i] = list.arr[i+1];
+
+        list.real_size--;
     }
 
     return ret;
@@ -136,18 +145,18 @@ T get_data(const list<T,size>& list, int index)
 }
 
 template <typename T, int size>
-std::string find(list<T,size>& list, T data)
+int find(list<T,size>& list, T data)
 {
     int num = 0;
     while (list.arr[num] != data && num < size_of_list(list))
         num++;
     if (num == size_of_list(list))
     {
-        //std::cout << "Element wasn't found\n";
-        return "Element wasn't found\n";
+        std::cout << "Element wasn't found\n";
+        return -1;
 
     } else {
-        return std::to_string(num);
+        return num;
     }
 }
 
@@ -169,7 +178,6 @@ void destruct(list<T,size>& list)
 
 int main ()
 {
-    /*
     list<int, 10> list;
 
     init(list, 1);
@@ -179,6 +187,7 @@ int main ()
     add(list, 5, 0);
     add(list, 2, 1);
     print(list);
+    std::cout << "Size in structure: " << list.real_size << std::endl;
 
     add_index(list, 3, 1);
     print(list);
@@ -188,6 +197,7 @@ int main ()
 
     std::cout << pop_index(list, 1) << std::endl;
     print(list);
+    std::cout << "Size in structure: " << list.real_size << std::endl;
 
     std::cout << "Data of 0 elem: " << get_data(list, 0) << std::endl;
     print(list);
@@ -197,15 +207,18 @@ int main ()
     add(list, 5, 0);
     print(list);
 
-    std::cout << find(list, 0);
+    int find_0 = find(list, 0);
+    if (find_0 != -1)
+        std::cout << find_0;
 
     destruct(list);
     print(list);
-*/
+
     ////////////////////////////////////////////////////////
     std::cout << "---------------------------" << std::endl;
     ////////////////////////////////////////////////////////
     
+    /*
     list<point, 10> list2;
 
     point first;
@@ -252,5 +265,6 @@ int main ()
     print(list2);
 
     destruct(list2);
+    */
     return 0;
 }
